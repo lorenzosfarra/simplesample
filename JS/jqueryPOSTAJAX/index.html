@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="author" content="Lorenzo Sfarra"/>
+    <title>Test</title>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#testform").submit(function(e) {
+          e.preventDefault();
+          $("#wait").show();
+          var formData = {
+            'name' : $('input[name=name]').val(),
+          };
+          console.log(JSON.stringify(formData));
+          $.ajax({
+            type : 'POST', 
+            url : 'test.php', // the url where we want to POST
+            data : formData, // our data object
+          })
+          .done(function(data) {
+            $("#sentvalue").text(data);
+          })
+          .fail(function() {
+            console.log("FAIL!");
+          })
+          .always(function() {
+            $("#wait").fadeOut("slow");
+          });
+          return false;
+        });
+      });
+    </script>
+
+    <style>
+      #wait { display: none; }
+    </style>
+
+  </head>
+
+  <body>
+    <div id="wait">Inviando i dati....</div>
+    <form  method="post" action="test.php" id="testform" name="testform">
+      <label for="name">Name:</label>
+      <input name="name" id="name" type="text"/>
+
+      <input name="submit" value="Invia" id="submit" type="submit"/>
+    </form>
+
+    <div id="sentvalue"></div>
+  </body>
+
+</html>
